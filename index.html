@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fast messages</title>
+    <link rel="icon" type="image/png" href="img/msg.png">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #794a52;
+            color: #333;
+            padding: 20px;
+            margin: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #b9c4c8;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        .form-row, .form-row2 {
+            display: flex;
+            flex-wrap: wrap;
+            margin-bottom: 10px;
+            gap: 10px;
+            align-items: center;
+        }
+        .form-row label, .form-row2 label {
+            flex: 1 1 40%;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        select, input[type="text"] {
+            flex: 2 1 55%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #fafafa;
+            color: #333;
+        }
+        h3 {
+            color: #555;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #80152f;
+            border: none;
+            border-radius: 4px;
+            color: #fff;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        .result {
+            background-color: #f8f9fa;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 4px;
+            white-space: pre-wrap;
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .result-table-container {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #794a5;
+            border-radius: 20px;
+            background-color: #f1dcc9;
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+
+        }
+        .result-table {
+            width: 100%;
+            border-radius: 20px;
+            border-collapse: collapse;
+            background-color: #fff;
+        }
+        .result-table th, .result-table td {
+            border: 1px solid #f1dcc9;
+            padding: 8px;
+            text-align: left;
+        }
+        .copy-button {
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+        }
+        .copy-button1 {
+            width: min-content;
+        }
+        .copy-button2 {
+            width: min-content;
+        }
+        .copy-button img {
+            width: 20px;
+            height: 20px;
+        }
+        .copied-text {
+            background-color: #52968b;
+            color: #fff;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            position: absolute;
+            right: 25px;
+            top: 10px;
+            transform: translateX(30px);
+        }
+        .copied-text1 {
+            right: 40px;
+            top: 10px;
+        }
+        .copied-text2 {            
+            right: 45px;
+            top: 15px;
+        }
+        .visible {
+            opacity: 1;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="form-row">
+            <label for="qa">👤 Choose QA:</label>
+            <select id="qa">
+                <option value="@Oleksandr Mykhailyk">@Oleksandr Mykhailyk</option>
+                <option value="@Oleksandr Matiash">@Oleksandr Matiash</option>
+                <option value="@Mykhailo Nimukha">@Mykhailo Nimukha</option>
+                <option value="@Diana Yashchenko">@Diana Yashchenko</option>
+                <option value="@Oleksandr Shevchenko">@Oleksandr Shevchenko</option>
+            </select>
+        </div>
+
+        <div class="form-row">
+            <label for="taskName">📋 Task Name:</label>
+            <input type="text" id="taskName" placeholder=".....">
+        </div>
+
+        <div class="form-row">
+            <label for="taskLink">🔗 Task Link:</label>
+            <input type="text" id="taskLink" placeholder=".....">
+        </div>
+
+        <div class="form-row">
+            <label for="popupLink">🔗 Pop-up Task Link:</label>
+            <input type="text" id="popupLink" placeholder=".....">
+        </div>
+
+        <div class="form-row2">
+            <label for="pageLink">🌐 Page Link:</label>
+            <input type="text" id="pageLink" placeholder=".....">
+        </div>
+
+        <h3>ID Information</h3>
+
+        <div class="form-row">
+            <label for="PromoID">🎁 Promo ID:</label>
+            <input type="text" id="PromoID" placeholder=".....">
+        </div>               
+
+        <div class="form-row">
+            <label for="SliderID">🎡 Slider ID:</label>
+            <input type="text" id="SliderID" placeholder=".....">
+        </div>
+
+        <div class="form-row">
+            <label for="popupID">🎈 Pop-up ID:</label>
+            <input type="text" id="popupID" placeholder=".....">
+        </div>
+
+        <div class="form-row">
+            <label for="ChampID">🏆 Champ ID:</label>
+            <input type="text" id="ChampID" placeholder=".....">
+        </div> 
+
+        <button onclick="generateMessage()">Generate Task Submission</button>
+
+        <div id="resultContainer" class="hidden">
+            <div class="result">
+                <div id="resultText"></div>
+                <button class="copy-button copy-button1" onclick="copyText('resultText', this)">
+                    <img src="img/copy_icon.png" alt="Copy">
+                </button>
+                <div class="copied-text copied-text1 hidden">Copied</div>
+            </div>
+            <div id="resultTableContainer" class="result-table-container hidden">
+                <div id="resultTable"></div>
+                <button class="copy-button copy-button2" onclick="copyText('resultTable', this)">
+                    <img src="img/copy_icon.png" alt="Copy">
+                </button>
+                <div class="copied-text copied-text2 hidden">Copied</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function generateMessage() {
+            const qa = document.getElementById("qa").value;
+            const taskName = document.getElementById("taskName").value;
+            const taskLink = document.getElementById("taskLink").value;
+            const popupLink = document.getElementById("popupLink").value;
+            const pageLink = document.getElementById("pageLink").value;
+
+            let message = `${qa}\n${taskName}\n`;
+
+            if (popupLink) {
+                message += `content: ${taskLink}\npop-up: ${popupLink}\n`;
+            } else {
+                message += `${taskLink}\n`;
+            }
+
+            message += `${pageLink}\n`; // Ensuring a newline for link separation
+
+            const PageLink = document.getElementById("pageLink").value;
+            const PromoID = document.getElementById("PromoID").value;
+            const ChampID = document.getElementById("ChampID").value;
+            const SliderID = document.getElementById("SliderID").value;
+            const popupID = document.getElementById("popupID").value;
+
+            let tableContent = `
+            <p>${pageLink}</p>
+            <table class="result-table">
+                <tr><th> </th><th> </th></tr>`;
+            
+            if (PromoID) {
+                tableContent += `<tr><td>Promo ID: </td><td>${PromoID}</td></tr>`;
+            }
+            if (ChampID) {
+                tableContent += `<tr><td>Champ ID: </td><td>${ChampID}</td></tr>`;
+            }
+            if (SliderID) {
+                tableContent += `<tr><td>Slider ID: </td><td>${SliderID}</td></tr>`;
+            }            
+            if (popupID) {
+                tableContent += `<tr><td>Pop-up ID: </td><td>${popupID}</td></tr>`;
+            }
+            tableContent += '</table>';
+
+            document.getElementById("resultText").innerHTML = `<div>${message}</div>`;
+            document.getElementById("resultTable").innerHTML = tableContent;
+
+            document.getElementById("resultContainer").classList.remove("hidden");
+
+            if (tableContent) {
+                document.getElementById("resultTableContainer").classList.remove("hidden");
+            }
+        }
+
+        function copyText(containerId, buttonElement) {
+            const container = document.getElementById(containerId);
+            const range = document.createRange();
+            range.selectNode(container);
+            window.getSelection().removeAllRanges();
+            window.getSelection().addRange(range);
+
+            try {
+                document.execCommand('copy');
+                const copiedTextElement = buttonElement.nextElementSibling;
+                copiedTextElement.classList.remove("hidden");
+                copiedTextElement.classList.add("visible");
+                setTimeout(() => {
+                    copiedTextElement.classList.remove("visible");
+                    copiedTextElement.classList.add("hidden");
+                }, 1000);
+            } catch (err) {
+                console.log('Copy command failed', err);
+            }
+
+            window.getSelection().removeAllRanges(); // Clear selection
+        }
+    </script>
+</body>
+</html>
